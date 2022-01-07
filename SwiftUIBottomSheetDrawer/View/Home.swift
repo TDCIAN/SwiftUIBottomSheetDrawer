@@ -43,26 +43,32 @@ struct Home: View {
                             .clipShape(CustomCorner(corners: [.topLeft, .topRight], radius: 30))
                         
                         VStack {
-                            Capsule()
-                                .fill(Color.white)
-                                .frame(width: 60, height: 4)
-                                .padding(.top)
-                            
-                            TextField("Search", text: $searchText)
-                                .padding(.vertical, 10)
-                                .padding(.horizontal)
-                                .background(BlurView(style: .dark))
-                                .cornerRadius(10)
-                                .colorScheme(.dark)
-                                .padding(.top, 10)
+                            VStack {
+                                Capsule()
+                                    .fill(Color.white)
+                                    .frame(width: 60, height: 4)
+                                
+                                TextField("Search", text: $searchText)
+                                    .padding(.vertical, 10)
+                                    .padding(.horizontal)
+                                    .background(BlurView(style: .dark))
+                                    .cornerRadius(10)
+                                    .colorScheme(.dark)
+                                    .padding(.top, 10)
+                            }
+                            .frame(height: 100)
                             
                             // ScrollView content
+                            ScrollView(.vertical, showsIndicators: false, content: {
+                                BottomContent()
+                            })
+
                         }
                         .padding(.horizontal)
                         .frame(maxHeight: .infinity, alignment: .top)
                     }
                     .offset(y: height - 100)
-                        .offset(y: -offset > 0 ? -offset <= (height - 100) ? offset : -(height - 100) : 0)
+                    .offset(y: -offset > 0 ? -offset <= (height - 100) ? offset : -(height - 100) : 0)
                     .gesture(DragGesture().updating($gestureOffset, body: { value, state, transcation in
                         state = value.translation.height
                         onChange()
@@ -106,5 +112,111 @@ struct Home: View {
 struct Home_Previews: PreviewProvider {
     static var previews: some View {
         Home()
+    }
+}
+
+struct BottomContent: View {
+    var body: some View {
+        VStack {
+            HStack {
+                Text("Favorite")
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button(action: {
+                    
+                }, label: {
+                    Text("See All")
+                        .fontWeight(.bold)
+                        .foregroundColor(.gray)
+                })
+            }
+            .padding(.top, 20)
+            
+            Divider()
+                .background(Color.white)
+            
+            ScrollView(.horizontal, showsIndicators: false, content: {
+                HStack(spacing: 15) {
+                    VStack(spacing: 8) {
+                        Button(action: {
+                            
+                        }, label: {
+                            Image(systemName: "house.fill")
+                                .font(.title)
+                                .frame(width: 65, height: 65)
+                                .background(BlurView(style: .dark))
+                                .clipShape(Circle())
+                        })
+                        
+                        Text("Home")
+                            .foregroundColor(Color.white)
+                    }
+                    
+                    VStack(spacing: 8) {
+                        Button(action: {
+                            
+                        }, label: {
+                            Image(systemName: "briefcase.fill")
+                                .font(.title)
+                                .frame(width: 65, height: 65)
+                                .background(BlurView(style: .dark))
+                                .clipShape(Circle())
+                        })
+                        
+                        Text("Work")
+                            .foregroundColor(Color.white)
+                    }
+                    
+                    VStack(spacing: 8) {
+                        Button(action: {
+                            
+                        }, label: {
+                            Image(systemName: "plus")
+                                .font(.title)
+                                .frame(width: 65, height: 65)
+                                .background(BlurView(style: .dark))
+                                .clipShape(Circle())
+                        })
+                        
+                        Text("Add")
+                            .foregroundColor(Color.white)
+                    }
+                    
+                }
+            })
+            .padding(.top)
+            
+            HStack {
+                Text("Editor's Pick")
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button(action: {
+                    
+                }, label: {
+                    Text("See All")
+                        .fontWeight(.bold)
+                        .foregroundColor(.gray)
+                })
+            }
+            .padding(.top, 25)
+            
+            Divider()
+                .background(Color.white)
+            
+            ForEach(1...6, id: \.self) { index in
+                Image("p\(index)")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: UIScreen.main.bounds.width - 30, height: 250)
+                    .cornerRadius(15)
+                    .padding(.top)
+            }
+        }
     }
 }
