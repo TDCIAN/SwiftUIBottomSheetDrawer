@@ -29,7 +29,7 @@ struct Home: View {
                     .frame(width: frame.width, height: frame.height)
                 
             }
-            .blur(radius: getBlurRadius())
+            .blur(radius: getBlurRadius()) // BlurRadius change depends on offset
             .ignoresSafeArea()
             
             // For getting height for drag gesture
@@ -57,16 +57,19 @@ struct Home: View {
                                     .padding(.top, 10)
                             }
                             .frame(height: 100)
+                            .border(Color.red, width: 1)
                             
                             // ScrollView content
                             ScrollView(.vertical, showsIndicators: false, content: {
                                 BottomContent()
                             })
+                            .border(Color.blue, width: 1)
 
                         }
                         .padding(.horizontal)
                         .frame(maxHeight: .infinity, alignment: .top)
                     }
+                    .border(Color.green, width: 1)
                     .offset(y: height - 100)
                     .offset(y: -offset > 0 ? -offset <= (height - 100) ? offset : -(height - 100) : 0)
                     .gesture(DragGesture().updating($gestureOffset, body: { value, state, transcation in
@@ -75,13 +78,22 @@ struct Home: View {
                     }).onEnded({ value in
                         let maxHeight = height - 100
                         withAnimation {
-                            // Loginc conditions for moving states
-                            // Up down or mid
+                                                        
+                            // (1) Mid
                             if -offset > 100 && -offset < maxHeight / 2 {
-                                // Mid
-                                offset = -(maxHeight / 3)
+                                // * Test each case!
+                                
+                                offset = -(maxHeight / 4)
+//                                offset = -(maxHeight / 3)
+//                                offset = -(maxHeight / 2)
+//                                offset = -(maxHeight / 1.5)
+//                                offset = -(maxHeight / 1.25)
+                                
+                            // (2) Top
                             } else if -offset > maxHeight / 2 {
                                 offset = -maxHeight
+                                
+                            // (3) Bottom
                             } else {
                                 offset = 0
                             }
@@ -89,7 +101,6 @@ struct Home: View {
                         // Storing last offset, so that the gesture can continue from the last position
                         lastOffset = offset
                     }))
-                        
                 )
             }
             .ignoresSafeArea(.all, edges: .bottom)
